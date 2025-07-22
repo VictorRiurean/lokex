@@ -2,7 +2,6 @@ package com.iodigital.lokex
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import com.iodigital.lokex.LokEx
 
 open class ExportLokaliseTask : DefaultTask() {
 
@@ -14,12 +13,18 @@ open class ExportLokaliseTask : DefaultTask() {
     @TaskAction
     fun export() {
         with(extension ?: LokExExtension(project)) {
-            LokEx.exportBlocking(
-                configFile = requireNotNull(configFile) { "LokEx config file not configured, add `lokex { configFile = File(...) }`" },
-                lokaliseToken = requireNotNull(lokaliseToken) { "Lokalise token not configured, add `lokex { lokaliseToken = File(...).readText().trim() }`" },
-                debugLogs = debugLogs,
-                verboseLogs = verboseLogs,
-            )
+            requireNotNull(
+                configFiles.orEmpty().plus(configFile).filterNotNull().takeUnless { it.isEmpty() }
+            ) {
+                "LokEx config file not configured, add `lokex { configFile = File(...) }`"
+            }.forEach { configFile ->
+                LokEx.exportBlocking(
+                    configFile = configFile,
+                    lokaliseToken = requireNotNull(lokaliseToken) { "Lokalise token not configured, add `lokex { lokaliseToken = File(...).readText().trim() }`" },
+                    debugLogs = debugLogs,
+                    verboseLogs = verboseLogs,
+                )
+            }
         }
     }
 }
