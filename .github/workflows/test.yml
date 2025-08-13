@@ -18,7 +18,7 @@ jobs:
         id: build
         run: |
           echo "${{ secrets.LOKALISE_TOKEN }}" > lokex-cli/.lokalisetoken
-          gradle clean check validatePlugins -PAzureBuildNumber="${{ github.run_id }}"
+          ./gradlew clean check validatePlugins -PAzureBuildNumber="${{ github.run_id }}"
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/linux@v2
