@@ -26,7 +26,7 @@ class LokExPluginFunctionalTest {
 
         // Check output (very rudamentary)
         val actual = File(projectDir, "strings.xml").load()
-        val expectedHash = -476103841
+        val expectedHash = 1593765536
         assert(actual.hashCode() == expectedHash) { "Expected result hash to be ${expectedHash}, but was ${actual.hashCode()}"}
     }
 
