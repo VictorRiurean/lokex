@@ -17,7 +17,7 @@ open class ExportLokaliseTask : DefaultTask() {
                 configFiles.orEmpty().plus(configFile).filterNotNull().takeUnless { it.isEmpty() }
             ) {
                 "LokEx config file not configured, add `lokex { configFile = File(...) }`"
-            }.forEach { configFile ->
+            }.distinctBy { it.absolutePath }.forEach { configFile ->
                 LokEx.exportBlocking(
                     configFile = configFile,
                     lokaliseToken = requireNotNull(lokaliseToken) { "Lokalise token not configured, add `lokex { lokaliseToken = File(...).readText().trim() }`" },
